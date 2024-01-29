@@ -1,0 +1,84 @@
+% Emacs, this is -*-latex-*-
+
+\title{Traffic control with \texttt{tc}}
+
+\maketitle
+\tableofcontents
+
+\href{https://man7.org/linux/man-pages/man8/tc.8.html}{\texttt{tc}} \cite{bert2012lartc}
+
+\begin{enumerate}
+
+\item Check the current configuration:
+  
+  \begin{lstlisting}{language=bash}
+tc qdisc show dev lo
+  \end{lstlisting}
+  
+  The output should be something like: ``\texttt{qdisc noqueue 0: root
+    refcnt 2}''
+
+\item A link locally using
+  \href{https://man7.org/linux/man-pages/man8/tc-netem.8.html}{netem}:
+
+  \begin{lstlisting}{language=bash}
+sudo tc qdisc add dev lo root netem delay <average_delay_in_miliseconds>ms <maximum_average_deviation_in_miliseconds>ms <Pearson_correlation_coefficient_expressed_as_a_percentage>% distribution <uniform|normal|pareto|paretonormal>
+  \end{lstlisting}
+  where:
+  \begin{description}
+  \item [\texttt{qdisc}:] Use the default
+    \href{https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)}{FIFO}
+    \href{https://wiki.debian.org/TrafficControl}{Queueing DISCipline}
+    for the outgoing traffic.
+  \item [\texttt{add}:] Add a new traffic control rule.
+  \item [\texttt{dev lo}:] The device affected by the
+    rule. \verb|lo| means \verb|loopback|.
+  \item [\texttt{root}:] The rule will be applied to all the outbound
+    traffic (it's the root rule of the possible tree of rules).
+  \item [\texttt{netem}:] Use the
+    \href{https://wiki.linuxfoundation.org/networking/netem}{network
+      emulator} to emulate a
+    \href{https://en.wikipedia.org/wiki/Wide_area_network}{WAN}.
+  \end{description}
+
+  Example:
+
+  \begin{enumerate}
+  \item Add the following rule:
+    
+    \begin{lstlisting}{language=bash}
+sudo tc qdisc add dev lo root netem delay 100ms 10ms 25% distribution normal
+    \end{lstlisting}
+    
+  \item Check that the rule has been installed with the command:
+    
+    \begin{lstlisting}{language=bash}
+tc qdisc show dev lo
+    \end{lstlisting}
+    
+    that should output (or something very similar): ``\texttt{ qdisc
+      netem 8009: root refcnt 2 limit 1000 delay 100ms 10ms 25\%}''
+  \end{enumerate}
+
+\item Delete the \verb|tc| rule with:
+  
+  \begin{lstlisting}{language=bash}
+sudo tc qdisc delete dev lo root netem delay <average_dalay_in_miliseconds>ms <maximum_average_deviation_in_miliseconds>ms <Pearson_correlation_coefficient_expressed_as_a_percentage>% distribution <uniform|normal|pareto|paretonormal>
+  \end{lstlisting}
+
+\item It is possible to change a working rule with:
+
+  \begin{lstlisting}{language=bash}
+sudo tc qdisc change dev lo root netem delay <average_dalay_in_miliseconds>ms <maximum_average_deviation_in_miliseconds>ms <Pearson_correlation_coefficient_expressed_as_a_percentage>% distribution <uniform|normal|pareto|paretonormal>
+\end{lstlisting}
+
+\item Lossing packets. For example, a packet
+loss ratio of $10\%$ can be configured with \verb|tc| by running:
+
+  \begin{lstlisting}{language=bash}
+sudo tc qdisc add dev lo root netem loss 10%
+  \end{lstlisting}
+  
+\end{enumerate}
+
+\bibliography{networking}

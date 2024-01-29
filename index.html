@@ -1,0 +1,129 @@
+<!DOCTYPE html> 
+<html lang='en-US' xml:lang='en-US'> 
+<head> <title>Traffic control with tc</title> 
+<meta charset='utf-8' /> 
+<meta content='TeX4ht (https://tug.org/tex4ht/)' name='generator' /> 
+<meta content='width=device-width,initial-scale=1' name='viewport' /> 
+<link href='index.css' rel='stylesheet' type='text/css' /> 
+<meta content='index.tex' name='src' /> 
+<script>window.MathJax = { tex: { tags: "ams", }, }; </script> 
+ <script async='async' id='MathJax-script' src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js' type='text/javascript'></script>  
+</head><body>
+   <div class='maketitle'>
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+
+<h2 class='titleHead'>Traffic control with tc</h2>
+ <div class='author'><span class='ecrm-1200'>Vicente González Ruiz</span></div><br />
+<div class='date'><span class='ecrm-1200'>January 29, 2024</span></div>
+   </div>
+   <h3 class='likesectionHead'><a id='x1-1000'></a>Contents</h3>
+   <div class='tableofcontents'>
+    <span class='sectionToc'><a href='#Q1-1-3'>References</a></span>
+   </div>
+<!-- l. 8 --><p class='indent'>   <a href='https://man7.org/linux/man-pages/man8/tc.8.html'><span class='ectt-1000'>tc</span></a> <span class='cite'>[<a href='#Xbert2012lartc'>1</a>]</span>
+</p><!-- l. 10 --><p class='indent'>
+     </p><ol class='enumerate1'>
+<li class='enumerate' id='x1-1002x1'>
+     <!-- l. 12 --><p class='noindent'>Check the current configuration:
+</p>
+     <!-- l. 14 -->
+<a id='x1-1003'></a>
+     <div class='lstlisting' id='listing-1'><span class='label'><a id='x1-1004r1'></a></span><span style='color:#000000'><span class='ectt-1000'>tc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>qdisc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>show</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>dev</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>lo</span></span></div>
+     
+     <!-- l. 18 --><p class='noindent'>The output should be something like: “<span class='ectt-1000'>qdisc noqueue 0: root refcnt
+     </span><span class='ectt-1000'>2</span>”
+     </p></li>
+<li class='enumerate' id='x1-1006x2'>
+     <!-- l. 21 --><p class='noindent'>A link locally using <a href='https://man7.org/linux/man-pages/man8/tc-netem.8.html'>netem</a>:
+</p>
+     <!-- l. 24 -->
+                                                                  
+
+                                                                  
+     <div class='lstlisting' id='listing-2'><span class='label'><a id='x1-1007r2'></a></span><span style='color:#000000'><span class='ectt-1000'>sudo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>tc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>qdisc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>add</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>dev</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>lo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>root</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>netem</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>delay</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>average_delay_in_miliseconds</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>maximum_average_deviation_in_miliseconds</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>Pearson_correlation_coefficient_expressed_as_a_percentage</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;%</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>distribution</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>uniform</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>normal</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>pareto</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>paretonormal</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span></div>
+     
+     <!-- l. 27 --><p class='noindent'>where:
+         </p><dl class='description'><dt class='description'>
+         <!-- l. 29 --><p class='noindent'>
+     <span class='ectt-1000'>qdisc</span><span class='ecbx-1000'>:</span> </p></dt><dd class='description'>
+         <!-- l. 29 --><p class='noindent'>Use the default <a href='https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)'>FIFO</a> <a href='https://wiki.debian.org/TrafficControl'>Queueing DISCipline</a> for the outgoing traffic.
+         </p></dd><dt class='description'>
+         <!-- l. 33 --><p class='noindent'>
+     <span class='ectt-1000'>add</span><span class='ecbx-1000'>:</span> </p></dt><dd class='description'>
+         <!-- l. 33 --><p class='noindent'>Add a new traffic control rule.
+         </p></dd><dt class='description'>
+         <!-- l. 34 --><p class='noindent'>
+     <span class='ectt-1000'>dev lo</span><span class='ecbx-1000'>:</span> </p></dt><dd class='description'>
+         <!-- l. 34 --><p class='noindent'>The device affected by the rule. <span class='obeylines-h'><span class='verb'><span class='ectt-1000'>lo</span></span></span> means <span class='obeylines-h'><span class='verb'><span class='ectt-1000'>loopback</span></span></span>.
+         </p></dd><dt class='description'>
+         <!-- l. 36 --><p class='noindent'>
+     <span class='ectt-1000'>root</span><span class='ecbx-1000'>:</span> </p></dt><dd class='description'>
+         <!-- l. 36 --><p class='noindent'>The rule will be applied to all the outbound traffic (it’s the root rule
+         of the possible tree of rules).
+         </p></dd><dt class='description'>
+         <!-- l. 38 --><p class='noindent'>
+     <span class='ectt-1000'>netem</span><span class='ecbx-1000'>:</span> </p></dt><dd class='description'>
+         <!-- l. 38 --><p class='noindent'>Use the <a href='https://wiki.linuxfoundation.org/networking/netem'>network emulator</a> to emulate a <a href='https://en.wikipedia.org/wiki/Wide_area_network'>WAN</a>.</p></dd></dl>
+     <!-- l. 44 --><p class='noindent'>Example:
+     </p><!-- l. 46 --><p class='noindent'>
+         </p><ol class='enumerate2'>
+<li class='enumerate' id='x1-1009x1'>
+         <!-- l. 47 --><p class='noindent'>Add the following rule:
+</p>
+         <!-- l. 49 -->
+         <div class='lstlisting' id='listing-3'><span class='label'><a id='x1-1010r3'></a></span><span style='color:#000000'><span class='ectt-1000'>sudo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>tc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>qdisc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>add</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>dev</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>lo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>root</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>netem</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>delay</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>100</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>10</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>25%</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>distribution</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>normal</span></span></div>
+         
+         </li>
+<li class='enumerate' id='x1-1012x2'>
+         <!-- l. 53 --><p class='noindent'>Check that the rule has been installed with the command:
+</p>
+         <!-- l. 55 -->
+                                                                  
+
+                                                                  
+         <div class='lstlisting' id='listing-4'><span class='label'><a id='x1-1013r4'></a></span><span style='color:#000000'><span class='ectt-1000'>tc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>qdisc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>show</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>dev</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>lo</span></span></div>
+         
+         <!-- l. 59 --><p class='noindent'>that should output (or something very similar): “  <span class='ectt-1000'>qdisc netem 8009:
+         </span><span class='ectt-1000'>root refcnt 2 limit 1000 delay 100ms 10ms 25%</span>”</p></li></ol>
+     </li>
+<li class='enumerate' id='x1-1015x3'>
+     <!-- l. 63 --><p class='noindent'>Delete the <span class='obeylines-h'><span class='verb'><span class='ectt-1000'>tc</span></span></span> rule with:
+</p>
+     <!-- l. 65 -->
+     <div class='lstlisting' id='listing-5'><span class='label'><a id='x1-1016r5'></a></span><span style='color:#000000'><span class='ectt-1000'>sudo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>tc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>qdisc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>delete</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>dev</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>lo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>root</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>netem</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>delay</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>average_dalay_in_miliseconds</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>maximum_average_deviation_in_miliseconds</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>Pearson_correlation_coefficient_expressed_as_a_percentage</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;%</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>distribution</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>uniform</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>normal</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>pareto</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>paretonormal</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span></div>
+     
+     </li>
+<li class='enumerate' id='x1-1018x4'>
+     <!-- l. 69 --><p class='noindent'>It is possible to change a working rule with:
+</p>
+     <!-- l. 71 -->
+     <div class='lstlisting' id='listing-6'><span class='label'><a id='x1-1019r6'></a></span><span style='color:#000000'><span class='ectt-1000'>sudo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>tc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>qdisc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>change</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>dev</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>lo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>root</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>netem</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>delay</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>average_dalay_in_miliseconds</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>maximum_average_deviation_in_miliseconds</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span><span style='color:#000000'><span class='ectt-1000'>ms</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>Pearson_correlation_coefficient_expressed_as_a_percentage</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;%</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>distribution</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>&lt;</span></span><span style='color:#000000'><span class='ectt-1000'>uniform</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>normal</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>pareto</span></span><span style='color:#000000'><span class='ectt-1000'>|</span></span><span style='color:#000000'><span class='ectt-1000'>paretonormal</span></span><span style='color:#000000'><span class='ectt-1000'>&gt;</span></span></div>
+     
+     </li>
+<li class='enumerate' id='x1-1021x5'>
+     <!-- l. 75 --><p class='noindent'>Lossing packets. For example, a packet loss ratio of \(10\%\) can be configured with <span class='obeylines-h'><span class='verb'><span class='ectt-1000'>tc</span></span></span>
+     by running:
+</p>
+     <!-- l. 78 -->
+     <div class='lstlisting' id='listing-7'><span class='label'><a id='x1-1022r7'></a></span><span style='color:#000000'><span class='ectt-1000'>sudo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>tc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>qdisc</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>add</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>dev</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>lo</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>root</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>netem</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>loss</span></span><span style='color:#000000'><span class='ectt-1000'> </span></span><span style='color:#000000'><span class='ectt-1000'>10%</span></span></div>
+     
+     </li></ol>
+   <div class='thebibliography'>
+   <p class='bibitem'><span class='biblabel'>
+ [1]<span class='bibsp'>   </span></span><a id='Xbert2012lartc'></a>Bert Hubert, Thomas Graf, Greg Maxwell, Remco van Mook, Martijn
+   van Oosterhout, Paul B. Schroeder, Jasper Spaans, and Pedro Larroy. <a href='https://lartc.org/'><span class='ecti-1000'>Linux
+   </span><span class='ecti-1000'>Advanced Routing &amp; Traffic Control</span></a>. Publisher: Bert Humbert et al., 2012.
+</p>
+   </div>
+                                                                  
+
+                                                                  
+<p><a id='Q1-1-3'></a></p>
+    
+</body> 
+</html>

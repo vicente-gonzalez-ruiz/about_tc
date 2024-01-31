@@ -5,7 +5,9 @@
 \maketitle
 \tableofcontents
 
-\href{https://man7.org/linux/man-pages/man8/tc.8.html}{\texttt{tc}} \cite{bert2012lartc}
+\section{Controlling the latency}
+
+See \href{https://man7.org/linux/man-pages/man8/tc.8.html}{\texttt{tc}} \cite{bert2012lartc}.
 
 \begin{enumerate}
 
@@ -80,5 +82,68 @@ sudo tc qdisc add dev lo root netem loss 10%
   \end{lstlisting}
   
 \end{enumerate}
+
+\section{Controlling the bit-rate}
+%{{{ 
+
+A bit-rate value can be simulated (locally) with:
+
+\begin{lstlisting}{language=bash}
+  sudo tc qdisc add dev lo root handle 1: tbf rate <bit-rate_in_kbps>kbit burst 32kbit limit 32kbit
+  sudo tc qdisc add dev lo parent 1:1 handle 10: netem delay <average_delay_in_miliseconds>ms <maximum_average_deviation_in_miliseconds>ms <Pearson_correlation_coefficient_expressed_as_a_percentage>% distribution <uniform|normal|pareto|paretonormal>
+\end{lstlisting}
+
+Examples:
+
+\begin{enumerate}
+\item Check the current configuration:
+  
+  \begin{lstlisting}{language=bash}
+    tc qdisc show dev lo
+  \end{lstlisting}
+  
+  The output should be something like:
+  
+  \begin{lstlisting}{language=bash}
+    qdisc noqueue 0: root refcnt 2
+  \end{lstlisting}
+  
+\item Define the rule for bit-rate control (example for $200$ kbps):
+  
+  \begin{lstlisting}{language=bash}
+    sudo tc qdisc add dev lo root handle 1: tbf rate 200kbit burst 32kbit limit 32kbit
+  \end{lstlisting}
+  
+\item Define the rule for latency control
+  (example for $100$ ms, $10$ ms of jitter, and
+  \href{https://wiki.linuxfoundation.org/networking/netem}{with the
+    next random transmission depending on $25$\% on the last}):
+  
+  \begin{lstlisting}{language=bash}
+    sudo tc qdisc add dev lo parent 1:1 handle 10: netem delay 100ms 10ms 25% distribution normal
+  \end{lstlisting}
+  
+\item After adding these rules, this should be the configuration:
+  
+  \begin{lstlisting}{language=bash}
+    tc qdisc show dev lo
+  \end{lstlisting}
+  
+  The output should be something like:
+  
+  \begin{lstlisting}{language=bash}
+    qdisc tbf 1: root refcnt 2 rate 200Kbit burst 4Kb lat 0us 
+    qdisc netem 10: parent 1:1 limit 1000 delay 100ms  10ms 25%
+  \end{lstlisting}
+
+\end{enumerate}
+
+Recall to delete the rules after they are unnecessary (example to delete the previous rules):
+
+\begin{lstlisting}{language=bash}
+  sudo tc qdisc delete dev lo parent 1:1 handle 10: netem delay 100ms 10ms 25% distribution normal
+  sudo tc qdisc delete dev lo root handle 1: tbf rate 200kbit burst 32kbit limit 32kbit
+\end{lstlisting}
+%}}}
 
 \bibliography{networking}
